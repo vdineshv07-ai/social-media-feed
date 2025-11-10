@@ -1,0 +1,60 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+public class Post {
+   private String id;
+   private String title;
+   private String author;
+   private String content;
+   private String imageUrl;
+   private String websiteUrl;
+   private int likes;
+   private long timestamp;
+
+   public Post(String var1, String var2, String var3, String var4, String var5, String var6) {
+      this.id = var1;
+      this.title = var2;
+      this.author = var3;
+      this.content = var4;
+      this.imageUrl = var5 != null ? var5 : "";
+      this.websiteUrl = var6 != null ? var6 : "";
+      this.likes = 0;
+      this.timestamp = System.currentTimeMillis();
+   }
+
+   public String getId() {
+      return this.id;
+   }
+
+   public String getTitle() {
+      return this.title;
+   }
+
+   public String getAuthor() {
+      return this.author;
+   }
+
+   public String getContent() {
+      return this.content;
+   }
+
+   public String getImageUrl() {
+      return this.imageUrl;
+   }
+
+   public String getWebsiteUrl() {
+      return this.websiteUrl;
+   }
+
+   public int getLikes() {
+      return this.likes;
+   }
+
+   public long getTimestamp() {
+      return this.timestamp;
+   }
+
+   public void incrementLikes() {
+      ++this.likes;
+   }
+}
