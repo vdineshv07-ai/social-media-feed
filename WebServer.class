@@ -1,0 +1,26 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+import com.sun.net.httpserver.HttpServer;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executor;
+
+public class WebServer {
+   private HttpServer server;
+   private final int port;
+
+   public WebServer(int var1) {
+      this.port = var1;
+   }
+
+   public void start() throws IOException {
+      this.server = HttpServer.create(new InetSocketAddress(this.port), 0);
+      this.server.createContext("/api/posts", new PostsHandler());
+      this.server.createContext("/api/posts/like", new LikeHandler());
+      this.server.createContext("/", new StaticHandler());
+      this.server.setExecutor((Executor)null);
+      this.server.start();
+      System.out.println("Web server started on http://localhost:" + this.port);
+   }
+}
