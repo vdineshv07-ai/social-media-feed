@@ -1,0 +1,18 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package main.java.com.social;
+
+import java.util.List;
+import java.util.Map;
+
+public class SimpleWebServer {
+   private static final List<Post> posts;
+   private static final Map<String, Integer> likes;
+
+   public SimpleWebServer() {
+      throw new Error("Unresolved compilation problems: \n\tThe declared package \"com.social\" does not match the expected package \"main.java.com.social\"\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error, insert \")\" to complete MethodInvocation\n\tSyntax error, insert \";\" to complete BlockStatements\n\tSyntax error, insert \")\" to complete MethodInvocation\n\tSyntax error, insert \";\" to complete LocalVariableDeclarationStatement\n\tString literal is not properly closed by a double-quote\n");
+   }
+
+   public static void main(String[] var0) throws Exception {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+}
