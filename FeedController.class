@@ -1,0 +1,28 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package main.java.com.social;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@CrossOrigin
+public class FeedController {
+   private final List<Post> posts;
+   private final Map<String, Integer> likes;
+
+   public FeedController() {
+      throw new Error("Unresolved compilation problems: \n\tThe declared package \"com.social\" does not match the expected package \"main.java.com.social\"\n\tThe import org.springframework cannot be resolved\n\tRestController cannot be resolved to a type\n\tCrossOrigin cannot be resolved to a type\n\tPostMapping cannot be resolved to a type\n\tRequestBody cannot be resolved to a type\n\tGetMapping cannot be resolved to a type\n\tRequestParam cannot be resolved to a type\n\tPostMapping cannot be resolved to a type\n\tPathVariable cannot be resolved to a type\n");
+   }
+
+   public Post createPost(@RequestBody Map<String, String> var1) {
+      throw new Error("Unresolved compilation problems: \n\tPostMapping cannot be resolved to a type\n\tRequestBody cannot be resolved to a type\n");
+   }
+
+   public List<Post> getPosts(@RequestParam String var1) {
+      throw new Error("Unresolved compilation problems: \n\tGetMapping cannot be resolved to a type\n\tRequestParam cannot be resolved to a type\n");
+   }
+
+   public Map<String, Integer> likePost(@PathVariable String var1) {
+      throw new Error("Unresolved compilation problems: \n\tPostMapping cannot be resolved to a type\n\tPathVariable cannot be resolved to a type\n");
+   }
+}
