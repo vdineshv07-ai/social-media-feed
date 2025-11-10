@@ -1,0 +1,10 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+public class MainApp {
+   public MainApp() {
+      throw new Error("Unresolved compilation problem: \n\tThe constructor Thread(server::stop) is undefined\n");
+   }
+
+   public static void main(String[] var0) {
+      throw new Error("Unresolved compilation problem: \n\tThe constructor Thread(server::stop) is undefined\n");
+   }
+}
