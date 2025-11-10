@@ -1,0 +1,50 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+public class ApiResponse {
+   private boolean success;
+   private String message;
+   private Object data;
+
+   public ApiResponse(boolean var1, String var2) {
+      this.success = var1;
+      this.message = var2;
+   }
+
+   public ApiResponse(boolean var1, String var2, Object var3) {
+      this.success = var1;
+      this.message = var2;
+      this.data = var3;
+   }
+
+   public boolean isSuccess() {
+      return this.success;
+   }
+
+   public String getMessage() {
+      return this.message;
+   }
+
+   public Object getData() {
+      return this.data;
+   }
+
+   public String toJson() {
+      StringBuilder var1 = new StringBuilder("{");
+      var1.append("\"success\":").append(this.success);
+      if (this.message != null) {
+         var1.append(",\"message\":\"").append(this.escapeJson(this.message)).append("\"");
+      }
+
+      if (this.data != null) {
+         var1.append(",\"data\":").append(this.data.toString());
+      }
+
+      var1.append("}");
+      return var1.toString();
+   }
+
+   private String escapeJson(String var1) {
+      return var1 == null ? "" : var1.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
+   }
+}
