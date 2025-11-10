@@ -1,0 +1,20 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+public class User {
+   private String username;
+   private String password;
+
+   public User(String var1, String var2) {
+      this.username = var1;
+      this.password = var2;
+   }
+
+   public String getUsername() {
+      return this.username;
+   }
+
+   public String getPassword() {
+      return this.password;
+   }
+}
