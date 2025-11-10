@@ -1,0 +1,22 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+import java.io.IOException;
+
+public class WebServerMain {
+   public WebServerMain() {
+   }
+
+   public static void main(String[] var0) {
+      try {
+         WebServer var1 = new WebServer(8080);
+         var1.start();
+         System.out.println("Social Media Feed Viewer running at http://localhost:8080");
+         System.out.println("Press Ctrl+C to stop the server");
+         Thread.currentThread().join();
+      } catch (InterruptedException | IOException var2) {
+         System.err.println("Error starting server: " + var2.getMessage());
+      }
+
+   }
+}
