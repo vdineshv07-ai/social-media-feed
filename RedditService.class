@@ -1,0 +1,46 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package social;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class RedditService {
+   public RedditService() {
+   }
+
+   public static List<Post> fetchPosts(String subreddit) {
+      List<Post> posts = new ArrayList();
+
+      try {
+         URL url = new URL("https://www.reddit.com/r/" + subreddit + "/.json");
+         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+         conn.setRequestMethod("GET");
+         conn.setRequestProperty("User-Agent", "JavaFXFeedViewer");
+         JsonObject json = JsonParser.parseReader(new InputStreamReader(conn.getInputStream())).getAsJsonObject();
+         JsonArray children = json.getAsJsonObject("data").getAsJsonArray("children");
+         Iterator var7 = children.iterator();
+
+         while(var7.hasNext()) {
+            JsonElement child = (JsonElement)var7.next();
+            JsonObject data = child.getAsJsonObject().getAsJsonObject("data");
+            String title = data.get("title").getAsString();
+            String author = data.get("author").getAsString();
+            String thumbnail = data.has("thumbnail") ? data.get("thumbnail").getAsString() : "";
+            String postUrl = data.has("url") ? data.get("url").getAsString() : "";
+            posts.add(new Post(title, author, thumbnail, postUrl));
+         }
+      } catch (Exception var13) {
+         var13.printStackTrace();
+      }
+
+      return posts;
+   }
+}
