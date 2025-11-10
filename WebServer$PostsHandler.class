@@ -1,0 +1,92 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.util.List;
+
+class WebServer$PostsHandler implements HttpHandler {
+   WebServer$PostsHandler() {
+   }
+
+   public void handle(HttpExchange var1) throws IOException {
+      String var2 = var1.getRequestMethod();
+      var1.getResponseHeaders().set("Content-Type", "application/json");
+      var1.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+      if ("GET".equals(var2)) {
+         this.handleGetPosts(var1);
+      } else if ("POST".equals(var2)) {
+         this.handleCreatePost(var1);
+      }
+
+   }
+
+   private void handleGetPosts(HttpExchange var1) throws IOException {
+      String var2 = var1.getRequestURI().getQuery();
+      List var3;
+      if (var2 != null && var2.startsWith("search=")) {
+         String var4 = URLDecoder.decode(var2.substring(7), "UTF-8");
+         var3 = PostService.searchPosts(var4);
+      } else {
+         var3 = PostService.getAllPosts();
+      }
+
+      StringBuilder var7 = new StringBuilder("[");
+
+      for(int var5 = 0; var5 < var3.size(); ++var5) {
+         Post var6 = (Post)var3.get(var5);
+         if (var5 > 0) {
+            var7.append(",");
+         }
+
+         var7.append("{").append("\"id\":\"").append(var6.getId()).append("\",").append("\"title\":\"").append(this.escapeJson(var6.getTitle())).append("\",").append("\"author\":\"").append(this.escapeJson(var6.getAuthor())).append("\",").append("\"content\":\"").append(this.escapeJson(var6.getContent())).append("\",").append("\"imageUrl\":\"").append(this.escapeJson(var6.getImageUrl())).append("\",").append("\"websiteUrl\":\"").append(this.escapeJson(var6.getWebsiteUrl())).append("\",").append("\"likes\":").append(var6.getLikes()).append(",").append("\"timestamp\":").append(var6.getTimestamp()).append("}");
+      }
+
+      var7.append("]");
+      String var8 = var7.toString();
+      var1.sendResponseHeaders(200, (long)var8.getBytes().length);
+      var1.getResponseBody().write(var8.getBytes());
+      var1.getResponseBody().close();
+   }
+
+   private void handleCreatePost(HttpExchange var1) throws IOException {
+      BufferedReader var2 = new BufferedReader(new InputStreamReader(var1.getRequestBody()));
+      StringBuilder var3 = new StringBuilder();
+
+      String var4;
+      while((var4 = var2.readLine()) != null) {
+         var3.append(var4);
+      }
+
+      String var5 = var3.toString();
+      String var6 = this.extractJsonValue(var5, "title");
+      String var7 = this.extractJsonValue(var5, "author");
+      String var8 = this.extractJsonValue(var5, "content");
+      String var9 = this.extractJsonValue(var5, "imageUrl");
+      boolean var10 = PostService.addPost(var6, var7, var8, var9, "");
+      String var11 = var10 ? "{\"success\":true,\"message\":\"Post created successfully\"}" : "{\"success\":false,\"message\":\"Failed to create post\"}";
+      var1.sendResponseHeaders(var10 ? 200 : 400, (long)var11.getBytes().length);
+      var1.getResponseBody().write(var11.getBytes());
+      var1.getResponseBody().close();
+   }
+
+   private String extractJsonValue(String var1, String var2) {
+      String var3 = "\"" + var2 + "\":\"";
+      int var4 = var1.indexOf(var3);
+      if (var4 == -1) {
+         return "";
+      } else {
+         var4 += var3.length();
+         int var5 = var1.indexOf("\"", var4);
+         return var5 > var4 ? var1.substring(var4, var5) : "";
+      }
+   }
+
+   private String escapeJson(String var1) {
+      return var1 == null ? "" : var1.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
+   }
+}
