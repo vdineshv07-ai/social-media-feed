@@ -1,0 +1,203 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package social;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.List;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+public class FeedController {
+   @FXML
+   private TextField subredditField;
+   @FXML
+   private TextField searchField;
+   @FXML
+   private TextField postTitleField;
+   @FXML
+   private TextField postAuthorField;
+   @FXML
+   private TextArea postContentArea;
+   @FXML
+   private VBox feedContainer;
+
+   public FeedController() {
+   }
+
+   @FXML
+   public void initialize() {
+      this.loadLocalPosts();
+   }
+
+   @FXML
+   public void loadFeed() {
+      String subreddit = this.subredditField.getText().trim();
+      if (subreddit.isEmpty()) {
+         subreddit = "java";
+      }
+
+      this.feedContainer.getChildren().clear();
+      this.showMessage("Loading posts from r/" + subreddit + "...");
+
+      try {
+         String apiUrl = "https://www.reddit.com/r/" + subreddit + "/hot.json?limit=10";
+         HttpURLConnection conn = (HttpURLConnection)(new URL(apiUrl)).openConnection();
+         conn.setRequestMethod("GET");
+         conn.setRequestProperty("User-Agent", "JavaFXRedditViewer/1.0");
+         BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+         StringBuilder response = new StringBuilder();
+
+         String line;
+         while((line = reader.readLine()) != null) {
+            response.append(line);
+         }
+
+         reader.close();
+         JsonObject json = JsonParser.parseString(response.toString()).getAsJsonObject();
+         JsonArray posts = json.getAsJsonObject("data").getAsJsonArray("children");
+         this.feedContainer.getChildren().clear();
+         Iterator var10 = posts.iterator();
+
+         while(var10.hasNext()) {
+            JsonElement element = (JsonElement)var10.next();
+            JsonObject data = element.getAsJsonObject().getAsJsonObject("data");
+            String title = data.get("title").getAsString();
+            String author = data.get("author").getAsString();
+            int upvotes = data.get("ups").getAsInt();
+            String text = "";
+            if (data.has("selftext") && !data.get("selftext").getAsString().isEmpty()) {
+               text = data.get("selftext").getAsString();
+            }
+
+            String imageUrl = "";
+            if (data.has("thumbnail") && data.get("thumbnail").getAsString().startsWith("http")) {
+               imageUrl = data.get("thumbnail").getAsString();
+            }
+
+            String postId = data.get("id").getAsString();
+            VBox postBox = this.createPostCard(postId, title, author, text, imageUrl, upvotes, false);
+            this.feedContainer.getChildren().add(postBox);
+         }
+      } catch (Exception var19) {
+         var19.printStackTrace();
+         this.showMessage("❌ Failed to load subreddit. Try another name or check your internet.");
+      }
+
+   }
+
+   @FXML
+   public void searchPosts() {
+      String query = this.searchField.getText().trim();
+      if (query.isEmpty()) {
+         this.loadLocalPosts();
+      } else {
+         List<Post> results = PostService.searchPosts(query);
+         this.feedContainer.getChildren().clear();
+         if (results.isEmpty()) {
+            this.showMessage("No posts found for: " + query);
+         } else {
+            Iterator var4 = results.iterator();
+
+            while(var4.hasNext()) {
+               Post post = (Post)var4.next();
+               VBox postBox = this.createPostCard(post.getId(), post.getTitle(), post.getAuthor(), post.getContent(), post.getThumbnail(), post.getLikes(), true);
+               this.feedContainer.getChildren().add(postBox);
+            }
+         }
+
+      }
+   }
+
+   @FXML
+   public void createPost() {
+      String title = this.postTitleField.getText().trim();
+      String author = this.postAuthorField.getText().trim();
+      String content = this.postContentArea.getText().trim();
+      if (!title.isEmpty() && !author.isEmpty()) {
+         PostService.addPost(title, author, content);
+         this.postTitleField.clear();
+         this.postAuthorField.clear();
+         this.postContentArea.clear();
+         this.loadLocalPosts();
+      } else {
+         this.showMessage("Title and Author are required!");
+      }
+   }
+
+   @FXML
+   public void loadLocalPosts() {
+      List<Post> posts = PostService.getLocalPosts();
+      this.feedContainer.getChildren().clear();
+      if (posts.isEmpty()) {
+         this.showMessage("No posts yet. Create your first post!");
+      } else {
+         Iterator var3 = posts.iterator();
+
+         while(var3.hasNext()) {
+            Post post = (Post)var3.next();
+            VBox postBox = this.createPostCard(post.getId(), post.getTitle(), post.getAuthor(), post.getContent(), post.getThumbnail(), post.getLikes(), true);
+            this.feedContainer.getChildren().add(postBox);
+         }
+      }
+
+   }
+
+   private VBox createPostCard(String postId, String title, String author, String content, String imageUrl, int likes, boolean showLikeButton) {
+      VBox postBox = new VBox(8.0);
+      postBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 12; -fx-background-radius: 10;");
+      postBox.setPrefWidth(650.0);
+      Label titleLabel = new Label(title);
+      titleLabel.setStyle("-fx-font-size: 15; -fx-font-weight: bold;");
+      HBox authorBox = new HBox(10.0);
+      Label authorLabel = new Label("\ud83d\udc64 " + author);
+      Label likesLabel = new Label("❤ " + likes + " likes");
+      authorBox.getChildren().addAll(new Node[]{authorLabel, likesLabel});
+      if (showLikeButton) {
+         Button likeBtn = new Button("\ud83d\udc4d Like");
+         likeBtn.setOnAction((e) -> {
+            PostService.likePost(postId);
+            this.loadLocalPosts();
+         });
+         authorBox.getChildren().add(likeBtn);
+      }
+
+      postBox.getChildren().addAll(new Node[]{titleLabel, authorBox});
+      if (!content.isEmpty()) {
+         Text contentText = new Text(content.length() > 200 ? content.substring(0, 200) + "..." : content);
+         contentText.setWrappingWidth(600.0);
+         postBox.getChildren().add(contentText);
+      }
+
+      if (!imageUrl.isEmpty() && imageUrl.startsWith("http")) {
+         try {
+            ImageView img = new ImageView(new Image(imageUrl, 150.0, 150.0, true, true));
+            postBox.getChildren().add(img);
+         } catch (Exception var14) {
+         }
+      }
+
+      return postBox;
+   }
+
+   private void showMessage(String msg) {
+      this.feedContainer.getChildren().clear();
+      this.feedContainer.getChildren().add(new Label(msg));
+   }
+}
