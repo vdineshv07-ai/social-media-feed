@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Social Media Feed Viewer</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .post { background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        input, textarea, button { margin: 5px; padding: 8px; }
+        button { background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .like-btn { background: #28a745; }
+        .like-btn:hover { background: #1e7e34; }
+    </style>
+</head>
+<body>
+    <h1>Social Media Feed Viewer</h1>
+    
+    <div class="section">
+        <h3>Search Posts</h3>
+        <input type="text" id="searchInput" placeholder="Search posts...">
+        <button onclick="searchPosts()">Search</button>
+        <button onclick="loadPosts()">Show All</button>
+    </div>
+
+    <div class="section">
+        <h3>Create New Post</h3>
+        <input type="text" id="titleInput" placeholder="Post title..."><br>
+        <input type="text" id="authorInput" placeholder="Your name..."><br>
+        <textarea id="contentInput" placeholder="What's on your mind?" rows="3" cols="50"></textarea><br>
+        <button onclick="createPost()">Create Post</button>
+    </div>
+
+    <div class="section">
+        <h3>Posts</h3>
+        <div id="postsContainer"></div>
+    </div>
+
+    <script>
+        async function createPost() {
+            const title = document.getElementById('titleInput').value;
+            const author = document.getElementById('authorInput').value;
+            const content = document.getElementById('contentInput').value;
+            
+            if (!title || !author) {
+                alert('Title and Author are required!');
+                return;
+            }
+            
+            await fetch('/api/posts', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({title, author, content})
+            });
+            
+            document.getElementById('titleInput').value = '';
+            document.getElementById('authorInput').value = '';
+            document.getElementById('contentInput').value = '';
+            loadPosts();
+        }
+
+        async function loadPosts() {
+            const response = await fetch('/api/posts');
+            const posts = await response.json();
+            displayPosts(posts);
+        }
+
+        async function searchPosts() {
+            const query = document.getElementById('searchInput').value;
+            const response = await fetch(`/api/posts?search=${encodeURIComponent(query)}`);
+            const posts = await response.json();
+            displayPosts(posts);
+        }
+
+        async function likePost(id) {
+            await fetch(`/api/posts/${id}/like`, {method: 'POST'});
+            loadPosts();
+        }
+
+        function displayPosts(posts) {
+            const container = document.getElementById('postsContainer');
+            if (posts.length === 0) {
+                container.innerHTML = '<p>No posts found. Create your first post!</p>';
+                return;
+            }
+            
+            container.innerHTML = posts.map(post => `
+                <div class="post">
+                    <h4>${post.title}</h4>
+                    <p><strong>👤 ${post.author}</strong> | ❤ ${post.likes} likes</p>
+                    ${post.content ? `<p>${post.content}</p>` : ''}
+                    <button class="like-btn" onclick="likePost('${post.id}')">👍 Like</button>
+                </div>
+            `).join('');
+        }
+
+        loadPosts();
+    </script>
+</body>
+</html>
