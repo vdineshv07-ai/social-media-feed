@@ -1,0 +1,49 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+class WebServer$LikeHandler implements HttpHandler {
+   WebServer$LikeHandler() {
+   }
+
+   public void handle(HttpExchange var1) throws IOException {
+      if (!"POST".equals(var1.getRequestMethod())) {
+         var1.sendResponseHeaders(405, 0L);
+         var1.getResponseBody().close();
+      } else {
+         BufferedReader var2 = new BufferedReader(new InputStreamReader(var1.getRequestBody()));
+         StringBuilder var3 = new StringBuilder();
+
+         String var4;
+         while((var4 = var2.readLine()) != null) {
+            var3.append(var4);
+         }
+
+         String var5 = var3.toString();
+         String var6 = this.extractJsonValue(var5, "postId");
+         boolean var7 = PostService.likePost(var6);
+         var1.getResponseHeaders().set("Content-Type", "application/json");
+         String var8 = var7 ? "{\"success\":true,\"message\":\"Post liked\"}" : "{\"success\":false,\"message\":\"Post not found\"}";
+         var1.sendResponseHeaders(var7 ? 200 : 404, (long)var8.getBytes().length);
+         var1.getResponseBody().write(var8.getBytes());
+         var1.getResponseBody().close();
+      }
+   }
+
+   private String extractJsonValue(String var1, String var2) {
+      String var3 = "\"" + var2 + "\":\"";
+      int var4 = var1.indexOf(var3);
+      if (var4 == -1) {
+         return "";
+      } else {
+         var4 += var3.length();
+         int var5 = var1.indexOf("\"", var4);
+         return var5 > var4 ? var1.substring(var4, var5) : "";
+      }
+   }
+}
