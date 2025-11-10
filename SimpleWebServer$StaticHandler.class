@@ -1,0 +1,16 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package main.java.com.social;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import java.io.IOException;
+
+class SimpleWebServer$StaticHandler implements HttpHandler {
+   SimpleWebServer$StaticHandler() {
+      throw new Error("Unresolved compilation problems: \n\tThe declared package \"com.social\" does not match the expected package \"main.java.com.social\"\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error on tokens, delete these tokens\n\tSyntax error, insert \")\" to complete MethodInvocation\n\tSyntax error, insert \";\" to complete BlockStatements\n\tSyntax error, insert \")\" to complete MethodInvocation\n\tSyntax error, insert \";\" to complete LocalVariableDeclarationStatement\n\tString literal is not properly closed by a double-quote\n");
+   }
+
+   public void handle(HttpExchange var1) throws IOException {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+}
