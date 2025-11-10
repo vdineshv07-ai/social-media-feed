@@ -1,0 +1,207 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package frontend;
+
+import backend.Post;
+import backend.PostService;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+public class SimpleFeedApp extends JFrame {
+   private JTextField searchField;
+   private JTextField titleField;
+   private JTextField authorField;
+   private JTextArea contentArea;
+   private JPanel postsPanel;
+   private JScrollPane scrollPane;
+
+   public SimpleFeedApp() {
+      this.setTitle("Social Media Feed Viewer");
+      this.setDefaultCloseOperation(3);
+      this.setLayout(new BorderLayout());
+      this.initializeComponents();
+      this.layoutComponents();
+      this.loadPosts();
+      this.setSize(800, 700);
+      this.setLocationRelativeTo((Component)null);
+   }
+
+   private void initializeComponents() {
+      this.searchField = new JTextField(20);
+      this.titleField = new JTextField(30);
+      this.authorField = new JTextField(20);
+      this.contentArea = new JTextArea(3, 30);
+      this.contentArea.setLineWrap(true);
+      this.contentArea.setWrapStyleWord(true);
+      this.postsPanel = new JPanel();
+      this.postsPanel.setLayout(new BoxLayout(this.postsPanel, 1));
+      this.scrollPane = new JScrollPane(this.postsPanel);
+      this.scrollPane.setVerticalScrollBarPolicy(22);
+   }
+
+   private void layoutComponents() {
+      JLabel headerLabel = new JLabel("Social Media Feed Viewer", 0);
+      headerLabel.setFont(new Font("Arial", 1, 20));
+      headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+      JPanel searchPanel = new JPanel(new FlowLayout());
+      searchPanel.setBorder(BorderFactory.createTitledBorder("Search Posts"));
+      searchPanel.add(new JLabel("Search:"));
+      searchPanel.add(this.searchField);
+      JButton searchBtn = new JButton("Search");
+      searchBtn.addActionListener((e) -> {
+         this.searchPosts();
+      });
+      searchPanel.add(searchBtn);
+      JButton showAllBtn = new JButton("Show All");
+      showAllBtn.addActionListener((e) -> {
+         this.loadPosts();
+      });
+      searchPanel.add(showAllBtn);
+      JPanel createPanel = new JPanel(new GridBagLayout());
+      createPanel.setBorder(BorderFactory.createTitledBorder("Create New Post"));
+      GridBagConstraints gbc = new GridBagConstraints();
+      gbc.insets = new Insets(5, 5, 5, 5);
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      createPanel.add(new JLabel("Title:"), gbc);
+      gbc.gridx = 1;
+      createPanel.add(this.titleField, gbc);
+      gbc.gridx = 0;
+      gbc.gridy = 1;
+      createPanel.add(new JLabel("Author:"), gbc);
+      gbc.gridx = 1;
+      createPanel.add(this.authorField, gbc);
+      gbc.gridx = 0;
+      gbc.gridy = 2;
+      createPanel.add(new JLabel("Content:"), gbc);
+      gbc.gridx = 1;
+      createPanel.add(new JScrollPane(this.contentArea), gbc);
+      gbc.gridx = 1;
+      gbc.gridy = 3;
+      JButton createBtn = new JButton("Create Post");
+      createBtn.setBackground(new Color(40, 167, 69));
+      createBtn.setForeground(Color.WHITE);
+      createBtn.addActionListener((e) -> {
+         this.createPost();
+      });
+      createPanel.add(createBtn, gbc);
+      JPanel topPanel = new JPanel(new BorderLayout());
+      topPanel.add(headerLabel, "North");
+      topPanel.add(searchPanel, "Center");
+      topPanel.add(createPanel, "South");
+      JPanel postsDisplayPanel = new JPanel(new BorderLayout());
+      postsDisplayPanel.setBorder(BorderFactory.createTitledBorder("Posts Feed"));
+      postsDisplayPanel.add(this.scrollPane, "Center");
+      this.add(topPanel, "North");
+      this.add(postsDisplayPanel, "Center");
+   }
+
+   private void createPost() {
+      throw new Error("Unresolved compilation problem: \n\tThe method addPost(String, String, String, String, String) in the type PostService is not applicable for the arguments (String, String, String)\n");
+   }
+
+   private void searchPosts() {
+      String query = this.searchField.getText().trim();
+      List<Post> results = PostService.searchPosts(query);
+      this.displayPosts(results);
+   }
+
+   private void loadPosts() {
+      List<Post> posts = PostService.getAllPosts();
+      this.displayPosts(posts);
+   }
+
+   private void displayPosts(List<Post> posts) {
+      this.postsPanel.removeAll();
+      if (posts.isEmpty()) {
+         JLabel noPostsLabel = new JLabel("No posts found. Create your first post!");
+         noPostsLabel.setHorizontalAlignment(0);
+         this.postsPanel.add(noPostsLabel);
+      } else {
+         Iterator var3 = posts.iterator();
+
+         while(var3.hasNext()) {
+            Post post = (Post)var3.next();
+            JPanel postCard = this.createPostCard(post);
+            this.postsPanel.add(postCard);
+            this.postsPanel.add(Box.createVerticalStrut(10));
+         }
+      }
+
+      this.postsPanel.revalidate();
+      this.postsPanel.repaint();
+   }
+
+   private JPanel createPostCard(Post post) {
+      JPanel card = new JPanel(new BorderLayout());
+      card.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+      card.setBackground(Color.WHITE);
+      card.setMaximumSize(new Dimension(Integer.MAX_VALUE, card.getPreferredSize().height));
+      JLabel titleLabel = new JLabel(post.getTitle());
+      titleLabel.setFont(new Font("Arial", 1, 14));
+      titleLabel.setForeground(new Color(0, 123, 255));
+      JPanel infoPanel = new JPanel(new FlowLayout(0));
+      JLabel authorLabel = new JLabel("By: " + post.getAuthor());
+      authorLabel.setFont(new Font("Arial", 0, 12));
+      authorLabel.setForeground(Color.GRAY);
+      JLabel likesLabel = new JLabel("Likes: " + post.getLikes());
+      likesLabel.setFont(new Font("Arial", 0, 12));
+      likesLabel.setForeground(Color.GRAY);
+      JButton likeBtn = new JButton("Like");
+      likeBtn.setBackground(new Color(40, 167, 69));
+      likeBtn.setForeground(Color.WHITE);
+      likeBtn.setPreferredSize(new Dimension(60, 25));
+      likeBtn.addActionListener((e) -> {
+         boolean success = PostService.likePost(post.getId());
+         if (success) {
+            this.loadPosts();
+         }
+
+      });
+      infoPanel.add(authorLabel);
+      infoPanel.add(Box.createHorizontalStrut(20));
+      infoPanel.add(likesLabel);
+      infoPanel.add(Box.createHorizontalStrut(20));
+      infoPanel.add(likeBtn);
+      JPanel contentPanel = new JPanel(new BorderLayout());
+      contentPanel.add(titleLabel, "North");
+      contentPanel.add(infoPanel, "Center");
+      if (!post.getContent().isEmpty()) {
+         JTextArea contentText = new JTextArea(post.getContent());
+         contentText.setEditable(false);
+         contentText.setLineWrap(true);
+         contentText.setWrapStyleWord(true);
+         contentText.setBackground(card.getBackground());
+         contentText.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+         contentPanel.add(contentText, "South");
+      }
+
+      card.add(contentPanel, "Center");
+      return card;
+   }
+
+   public static void main(String[] args) {
+      SwingUtilities.invokeLater(() -> {
+         (new SimpleFeedApp()).setVisible(true);
+      });
+   }
+}
