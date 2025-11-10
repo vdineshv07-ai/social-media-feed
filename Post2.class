@@ -1,0 +1,71 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package social;
+
+import java.util.UUID;
+
+public class Post {
+   private String id;
+   private String title;
+   private String author;
+   private String content;
+   private String thumbnail;
+   private String url;
+   private int likes;
+   private boolean isLocal;
+
+   public Post(String id, String title, String author, String content, String thumbnail, String url) {
+      this.id = id;
+      this.title = title;
+      this.author = author;
+      this.content = content;
+      this.thumbnail = thumbnail;
+      this.url = url;
+      this.likes = 0;
+      this.isLocal = true;
+   }
+
+   public Post(String title, String author, String thumbnail, String url) {
+      this(UUID.randomUUID().toString(), title, author, "", thumbnail, url);
+      this.isLocal = false;
+   }
+
+   public String getId() {
+      return this.id;
+   }
+
+   public String getTitle() {
+      return this.title;
+   }
+
+   public String getAuthor() {
+      return this.author;
+   }
+
+   public String getContent() {
+      return this.content;
+   }
+
+   public String getThumbnail() {
+      return this.thumbnail;
+   }
+
+   public String getUrl() {
+      return this.url;
+   }
+
+   public int getLikes() {
+      return this.likes;
+   }
+
+   public boolean isLocal() {
+      return this.isLocal;
+   }
+
+   public void setLikes(int likes) {
+      this.likes = likes;
+   }
+
+   public void incrementLikes() {
+      ++this.likes;
+   }
+}
