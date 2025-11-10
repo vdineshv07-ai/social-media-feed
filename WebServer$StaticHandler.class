@@ -1,0 +1,19 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package backend;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import java.io.IOException;
+
+class WebServer$StaticHandler implements HttpHandler {
+   WebServer$StaticHandler() {
+   }
+
+   public void handle(HttpExchange var1) throws IOException {
+      String var2 = "<!DOCTYPE html><html><head><title>Social Media Feed Viewer</title><style>body{font-family:Arial;max-width:800px;margin:0 auto;padding:20px;background:#e6f3ff}.section{margin:20px 0;padding:15px;border:1px solid #ddd;border-radius:8px;background:white}.post{background:#f9f9f9;padding:15px;margin:10px 0;border-radius:8px;cursor:pointer}input,textarea,button{margin:5px;padding:8px}button{background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer}.like-btn{background:#28a745}</style></head><body><h1>Social Media Feed Viewer</h1><div class='section'><h3>Search Posts</h3><input type='text' id='searchInput' placeholder='Search posts...'><button onclick='searchPosts()'>Search</button><button onclick='loadPosts()'>Show All</button></div><div class='section'><h3>Create New Post</h3><input type='text' id='titleInput' placeholder='Post title...'><br><input type='text' id='authorInput' placeholder='Your name...'><br><textarea id='contentInput' placeholder='What is on your mind?' rows='3'></textarea><br><input type='text' id='imageInput' placeholder='Image URL (optional)...'><br><button onclick='createPost()'>Create Post</button></div><div class='section'><h3>Posts</h3><div id='postsContainer'></div></div><script>async function createPost(){const title=document.getElementById('titleInput').value.trim();const author=document.getElementById('authorInput').value.trim();const content=document.getElementById('contentInput').value.trim();const imageUrl=document.getElementById('imageInput').value.trim();if(!title||!author){alert('Title and Author are required!');return;}await fetch('/api/posts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,author,content,imageUrl})});document.getElementById('titleInput').value='';document.getElementById('authorInput').value='';document.getElementById('contentInput').value='';document.getElementById('imageInput').value='';loadPosts();}async function loadPosts(){const response=await fetch('/api/posts');const posts=await response.json();displayPosts(posts);}async function searchPosts(){const query=document.getElementById('searchInput').value.trim();if(!query){loadPosts();return;}const response=await fetch('/api/posts?search='+encodeURIComponent(query));const posts=await response.json();displayPosts(posts);}async function likePost(id){await fetch('/api/posts/like',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({postId:id})});loadPosts();}function openWebsite(url){if(url&&url.trim()!==''){window.open(url,'_blank');}}function displayPosts(posts){const container=document.getElementById('postsContainer');if(posts.length===0){container.innerHTML='<p>No posts found.</p>';return;}container.innerHTML=posts.map(post=>'<div class=\"post\" onclick=\"openWebsite(\\''+post.websiteUrl+'\\')\"><h4>'+post.title+'</h4><p><strong>By: '+post.author+'</strong> | Likes: '+post.likes+'</p>'+(post.imageUrl?'<img src=\"'+post.imageUrl+'\" style=\"max-width:100%;height:200px;object-fit:cover;border-radius:8px;margin:10px 0\">':'')+(post.content?'<p>'+post.content+'</p>':'')+'<button class=\"like-btn\" onclick=\"event.stopPropagation();likePost(\\''+post.id+'\\')\" style=\"margin-top:10px\">Like</button></div>').join('');}loadPosts();</script></body></html>";
+      var1.getResponseHeaders().set("Content-Type", "text/html");
+      var1.sendResponseHeaders(200, (long)var2.getBytes().length);
+      var1.getResponseBody().write(var2.getBytes());
+      var1.getResponseBody().close();
+   }
+}
