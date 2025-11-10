@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="social.FeedController"
+      spacing="10"
+      xmlns:fx="http://javafx.com/fxml"
+      style="-fx-padding: 15;">
+    
+    <Label text="Social Media Feed Viewer" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    
+    <!-- Search Section -->
+    <VBox spacing="5">
+        <Label text="Search Posts" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10">
+            <TextField fx:id="searchField" promptText="Search posts..." prefWidth="300"/>
+            <Button text="Search" onAction="#searchPosts"/>
+            <Button text="Show All" onAction="#loadLocalPosts"/>
+        </HBox>
+    </VBox>
+    
+    <Separator/>
+    
+    <!-- Create Post Section -->
+    <VBox spacing="5">
+        <Label text="Create New Post" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="postTitleField" promptText="Post title..."/>
+        <TextField fx:id="postAuthorField" promptText="Your name..."/>
+        <TextArea fx:id="postContentArea" promptText="What's on your mind?" prefRowCount="3"/>
+        <Button text="Create Post" onAction="#createPost" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    </VBox>
+    
+    <Separator/>
+    
+    <!-- Reddit Feed Section -->
+    <VBox spacing="5">
+        <Label text="Reddit Feed" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10">
+            <TextField fx:id="subredditField" promptText="Enter subreddit (e.g., java, news)" prefWidth="300"/>
+            <Button text="Load Reddit Feed" onAction="#loadFeed"/>
+        </HBox>
+    </VBox>
+    
+    <Separator/>
+    
+    <!-- Feed Container -->
+    <ScrollPane fitToWidth="true" prefHeight="400">
+        <VBox fx:id="feedContainer" spacing="10" style="-fx-padding: 10;"/>
+    </ScrollPane>
+</VBox>
