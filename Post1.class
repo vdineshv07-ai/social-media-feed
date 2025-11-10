@@ -1,0 +1,38 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package main.java.com.social;
+
+public class Post {
+   private String id;
+   private String title;
+   private String author;
+   private String content;
+   private int likes;
+
+   public Post(String var1, String var2, String var3, String var4) {
+      throw new Error("Unresolved compilation problem: \n\tThe declared package \"com.social\" does not match the expected package \"main.java.com.social\"\n");
+   }
+
+   public String getId() {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+
+   public String getTitle() {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+
+   public String getAuthor() {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+
+   public String getContent() {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+
+   public int getLikes() {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+
+   public void setLikes(int var1) {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+}
