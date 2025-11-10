@@ -1,0 +1,20 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package main.java.com.social;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import java.io.IOException;
+
+class SimpleServer$PostHandler implements HttpHandler {
+   SimpleServer$PostHandler() {
+      throw new Error("Unresolved compilation problem: \n\tThe declared package \"com.social\" does not match the expected package \"main.java.com.social\"\n");
+   }
+
+   public void handle(HttpExchange var1) throws IOException {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+
+   private String extractValue(String var1, String var2) {
+      throw new Error("Unresolved compilation problem: \n");
+   }
+}
