@@ -1,0 +1,52 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package social;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+public class PostService {
+   private static final List<Post> localPosts = new ArrayList();
+   private static final Map<String, Integer> likeCounts = new HashMap();
+
+   public PostService() {
+   }
+
+   public static void addPost(String title, String author, String content) {
+      String id = UUID.randomUUID().toString();
+      Post post = new Post(id, title, author, content, "", "");
+      localPosts.add(0, post);
+   }
+
+   public static void likePost(String postId) {
+      likeCounts.put(postId, (Integer)likeCounts.getOrDefault(postId, 0) + 1);
+      Iterator var2 = localPosts.iterator();
+
+      while(var2.hasNext()) {
+         Post post = (Post)var2.next();
+         if (post.getId().equals(postId)) {
+            post.incrementLikes();
+            break;
+         }
+      }
+
+   }
+
+   public static int getLikeCount(String postId) {
+      return (Integer)likeCounts.getOrDefault(postId, 0);
+   }
+
+   public static List<Post> getLocalPosts() {
+      return new ArrayList(localPosts);
+   }
+
+   public static List<Post> searchPosts(String query) {
+      return (List)localPosts.stream().filter((post) -> {
+         return post.getTitle().toLowerCase().contains(query.toLowerCase()) || post.getContent().toLowerCase().contains(query.toLowerCase()) || post.getAuthor().toLowerCase().contains(query.toLowerCase());
+      }).collect(Collectors.toList());
+   }
+}
