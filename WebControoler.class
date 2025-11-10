@@ -1,0 +1,13 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package main.java.com.social;
+
+@SpringBootApplication
+public class WebApplication {
+   public WebApplication() {
+      throw new Error("Unresolved compilation problems: \n\tThe declared package \"com.social\" does not match the expected package \"main.java.com.social\"\n\tThe import org.springframework cannot be resolved\n\tThe import org.springframework cannot be resolved\n\tSpringBootApplication cannot be resolved to a type\n\tSpringApplication cannot be resolved\n");
+   }
+
+   public static void main(String[] var0) {
+      throw new Error("Unresolved compilation problem: \n\tSpringApplication cannot be resolved\n");
+   }
+}
